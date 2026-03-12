@@ -26,6 +26,7 @@ class User extends Authenticatable
         'gender',
         'birth_date',
         'photo',
+        'otp_register',
         'email_verified_at',
         'password',
         'social_media_id',

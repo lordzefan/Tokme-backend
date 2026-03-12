@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('photo')->nullable();
+            $table->string('otp_register')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->string('social_media_id')->nullable();
