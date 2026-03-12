@@ -9,5 +9,5 @@ use App\Http\Controllers\AuthenticationController;
 // })->middleware('auth:sanctum');
 
 Route::post('/register', [AuthenticationController::class, 'register']);
-Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtp']);
+Route::post('/check-otp-register', [AuthenticationController::class, 'verifyOtp']);
 Route::post('/verify-register', [AuthenticationController::class, 'verifyRegister']);

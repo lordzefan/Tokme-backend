@@ -14,7 +14,7 @@ class SendRegisterOTP extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $user;
+    public $user;
     /**
      * Create a new message instance.
      */
@@ -39,7 +39,7 @@ class SendRegisterOTP extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mails.register_otp',
+            view: 'mails.register-otp',
         );
     }
 
