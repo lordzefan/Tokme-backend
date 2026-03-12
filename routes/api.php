@@ -2,11 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthenticationController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
-Route::post('/verify-register', [AuthController::class, 'verifyRegister']);
+Route::post('/register', [AuthenticationController::class, 'register']);
+Route::post('/verify-otp', [AuthenticationController::class, 'verifyOtp']);
+Route::post('/verify-register', [AuthenticationController::class, 'verifyRegister']);
