@@ -10,4 +10,6 @@ use App\Http\Controllers\AuthenticationController;
 
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/check-otp-register', [AuthenticationController::class, 'verifyOtp']);
+Route::post('/resend-otp', [AuthenticationController::class, 'resendOtp']);
 Route::post('/verify-register', [AuthenticationController::class, 'verifyRegister']);
+Route::post('/login', [AuthenticationController::class, 'login']);
