@@ -33,4 +33,6 @@ Route::get('/category', [HomeController::class, 'getCategories']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('profile', [ProfileController::class, 'getProfile']);
     Route::patch('profile', [ProfileController::class, 'updateProfile']);
+
+    Route::apiResource('address', \App\Http\Controllers\AddressController::class);
 });
