@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\ResponseFormatter;
+use App\ResponseFormatter;
 use Illuminate\Support\Facades\Validator;
 
 class AddressController extends Controller
@@ -13,8 +13,8 @@ class AddressController extends Controller
      */
     public function index()
     {
-        $address = request()->user()->addresses();
-        return ResponseFormatter::success($address->pluck('api_response'));
+        $addresses = request()->user()->addresses()->with('city.province')->get();
+        return ResponseFormatter::success($addresses->pluck('api_response'));
     }
 
     /**
@@ -25,10 +25,11 @@ class AddressController extends Controller
         $validator = Validator::make(request()->all(), $this->getValidation());
 
         if ($validator->fails()) {
-            return ResponseFormatter::error($validator->errors());
+            return ResponseFormatter::error(400, $validator->errors());
         }
 
         $address = request()->user()->addresses()->create($this->prepareData());
+        $address->refresh();
         return $this->show($address->uuid);
     }
 
@@ -37,7 +38,7 @@ class AddressController extends Controller
      */
     public function show(string $uuid)
     {
-        $address = request()->user()->addresses()->where('uuid', $uuid)->firstOrFail();
+        $address = request()->user()->addresses()->with('city.province')->where('uuid', $uuid)->firstOrFail();
         return ResponseFormatter::success($address->api_response);
     }
 
@@ -69,13 +70,29 @@ class AddressController extends Controller
             ]
         );
     }
+
+    public function setDefault(string $uuid)
+    {
+        $address = request()->user()->addresses()->where('uuid', $uuid)->firstOrFail();
+        
+        $address->update([
+            'is_default' => true
+        ]);
+        request()->user()->addresses()->where('id', '!=', $address->id)->update([
+            'is_default' => false
+        ]);
+        return ResponseFormatter::success([
+            'is_success' => true,
+        ]);
+    }
+           
      protected function getValidation()
     {
         return [
             'is_default' => 'required|in:1,0',
             'receiver_name' => 'required|string|max:30|min:3',
             'receiver_phone' => 'required|string|max:20|min:10',
-            'city_id' => 'required|integer|exists:cities,uuid',
+            'city_uuid' => 'required|exists:cities,uuid',
             'district' => 'required|string|max:255',
             'postal_code' => 'required|numeric',
             'detail_address' => 'nullable|string|max:255',
@@ -90,15 +107,23 @@ class AddressController extends Controller
             'is_default',
             'receiver_name',
             'receiver_phone',
-            'city_id',
+            'city_uuid',
             'district',
             'postal_code',
             'detail_address',
             'address_note',
             'type',
         ]);
-        $payload['city_id'] = \App\Models\City::where('uuid', $payload['city_uuid']);
-        return $payload;
 
+        $payload['city_id'] = \App\Models\City::where('uuid', $payload['city_uuid'])->firstOrFail()->id;
+        unset($payload['city_uuid']);
+
+        if ($payload['is_default'] == 1) {
+            request()->user()->addresses()->update([
+                'is_default' => false
+            ]);
+        }
+
+        return $payload;
     }
 }

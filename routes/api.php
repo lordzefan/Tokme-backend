@@ -35,4 +35,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('profile', [ProfileController::class, 'updateProfile']);
 
     Route::apiResource('address', \App\Http\Controllers\AddressController::class);
+    Route::post('address/{uuid}/set-default', [\App\Http\Controllers\AddressController::class, 'setDefault']);
 });
