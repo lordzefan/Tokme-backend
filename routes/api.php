@@ -36,4 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('address', \App\Http\Controllers\AddressController::class);
     Route::post('address/{uuid}/set-default', [\App\Http\Controllers\AddressController::class, 'setDefault']);
+
+    Route::get('province', [\App\Http\Controllers\AddressController::class, 'GetProvinces']);
+    Route::get('city', [\App\Http\Controllers\AddressController::class, 'GetCities']);
 });

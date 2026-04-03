@@ -8,6 +8,28 @@ use Illuminate\Support\Facades\Validator;
 
 class AddressController extends Controller
 {
+    public function GetProvinces()
+    {
+        $provinces = \App\Models\Province::get(['uuid', 'name']);
+        return ResponseFormatter::success($provinces);
+    }
+
+    public function GetCities()
+    {
+        $query = \App\Models\City::query();
+        if (request()->province_uuid) {
+            $query = $query->whereIn('province_id', function ($subQuery) {
+                $subQuery->from('provinces')->where('uuid', request()->province_uuid)->select('id');
+            });
+        }
+
+        if(request()->search){
+                $query = $query->where('name', 'LIKE', '%' . request()->search . '%');
+        }
+
+        $cities = $query->get();
+        return ResponseFormatter::success($cities->pluck('api_response'));
+    }    
     /**
      * Display a listing of the resource.
      */
