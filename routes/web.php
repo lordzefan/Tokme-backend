@@ -10,6 +10,6 @@ Route::get('/welcome', function () {
     return 'Selamat datang di Tokme Backend!';
 });
 
-Route::get('/dashboard', function () {
-    return 'dashboard';
+Route::get('/cektoken', function () {
+    return view('cektoken');
 });

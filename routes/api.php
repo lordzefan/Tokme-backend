@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
+Route::post('/google-auth', [AuthenticationController::class, 'authGoogle']);
 Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/check-otp-register', [AuthenticationController::class, 'verifyOtp']);
 Route::post('/resend-otp', [AuthenticationController::class, 'resendOtp']);
